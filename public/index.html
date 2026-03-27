@@ -2,41 +2,31 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Chat IA groq (API) realiado por Daniel Olivares - puedes descargar la respuesta en PDF</title>
+<title>Chat IA Daniel - Conversación Bilingüe</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; }
-
-/* Contenedor superior: diagrama y script */
 #top-container { display: flex; flex: 0 0 200px; width: 100%; border-bottom: 1px solid #ccc; background: #f5f5f5; overflow-x: auto; }
 #diagrama-container { flex: 3; position: relative; min-width: 1000px; height: 150px; }
 #script-container { flex: 1; background: #f4f4f4; border-left: 1px solid #ccc; padding: 10px; overflow: auto; font-family: monospace; font-size: 12px; min-width: 250px; }
-
-/* Contenedor de detalle dinámico debajo del diagrama */
 #diagrama-detalle { height: 100px; border-top:1px solid #ccc; padding:10px; font-family: monospace; white-space: pre-wrap; overflow-y:auto; background:#fff; }
 
-/* Chat */
 #chat-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 #chat { border: 1px solid #ccc; padding: 10px; flex: 1; overflow-y: auto; background: #f9f9f9; width: 100%; box-sizing: border-box; word-break: break-word; }
-
-/* Mensajes */
 .mensaje-container { display: flex; margin: 5px 0; align-items: flex-start; }
-.mensaje { padding: 8px 12px; border-radius: 15px; max-width: 100%; position: relative; word-break: break-word; }
+.mensaje { padding: 8px 12px; border-radius: 15px; max-width: 70%; word-break: break-word; }
 .usuario { background: #007bff; color: white; margin-left: auto; text-align: right; }
 .ia { background: #e0e0e0; color: black; margin-right: auto; text-align: left; }
 
-/* Controles */
 input, select, button, label { margin: 5px 0; padding: 5px; }
 #controls { margin: 10px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-
-/* Entrada inferior */
 #input-container { display: flex; padding: 10px; background: #eee; position: sticky; bottom: 0; z-index: 5; }
 #pregunta { flex: 1; padding: 8px; font-size: 14px; }
-#send-btn, #pdf-btn { padding: 8px 12px; font-size: 14px; margin-left: 5px; }
+#send-btn, #pdf-btn, #new-btn { padding: 8px 12px; font-size: 14px; margin-left: 5px; }
 </style>
 </head>
 <body>
 
-<h2 style="margin:10px;">Chat IA groq (API) Daniel Olivares      ->      Descarga respuestas en PDF</h2>
+<h2 style="margin:10px;">Chat IA Daniel Olivares (API->Groq) en Github->Render - Conversación Fluida - Respuestas en PDF</h2>
 
 <div id="top-container">
   <div id="diagrama-container">
@@ -46,34 +36,19 @@ input, select, button, label { margin: 5px 0; padding: 5px; }
           <path d="M0,0 L0,10 L10,5 z" fill="black" />
         </marker>
       </defs>
-
-      <!-- Bloques horizontales compactos -->
       <rect class="block" id="usuario" x="20" y="10" width="120" height="60" fill="#4CAF50" rx="8" ry="8"/>
       <text x="80" y="45" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Usuario</text>
-
       <rect class="block" id="api" x="160" y="10" width="140" height="60" fill="#2196F3" rx="8" ry="8"/>
       <text x="230" y="45" font-size="12" font-weight="bold" fill="white" text-anchor="middle">API / Backend</text>
-
       <rect class="block" id="llm" x="320" y="10" width="140" height="60" fill="#FF9800" rx="8" ry="8"/>
       <text x="390" y="45" font-size="12" font-weight="bold" fill="white" text-anchor="middle">LLM</text>
-
       <rect class="block" id="post" x="480" y="10" width="140" height="60" fill="#9C27B0" rx="8" ry="8"/>
       <text x="550" y="45" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Postprocesamiento</text>
-
       <rect class="block" id="salida" x="640" y="70" width="140" height="40" fill="#607D8B" rx="8" ry="8"/>
       <text x="710" y="95" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Salida Final</text>
-
       <rect class="block" id="tokenizacion_block" x="800" y="10" width="140" height="60" fill="#FF5722" rx="8" ry="8"/>
       <text x="870" y="45" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Tokenización</text>
-
-      <!-- Flechas ajustadas -->
-      <line x1="140" y1="40" x2="160" y2="40" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-      <line x1="300" y1="40" x2="320" y2="40" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-      <line x1="460" y1="40" x2="480" y2="40" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-      <line x1="710" y1="70" x2="710" y2="70" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-      <line x1="780" y1="40" x2="800" y2="40" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
     </svg>
-
     <div id="diagrama-detalle">Haz clic en un bloque del diagrama para ver detalles...</div>
   </div>
 
@@ -119,6 +94,7 @@ input, select, button, label { margin: 5px 0; padding: 5px; }
     <input type="text" id="pregunta" placeholder="Escribe tu mensaje">
     <button id="send-btn">Enviar</button>
     <button id="pdf-btn">Descargar PDF</button>
+    <button id="new-btn">Nueva Consulta</button>
   </div>
 </div>
 
@@ -133,139 +109,124 @@ const tokenSelect = document.getElementById("tokenizacion");
 const scriptContent = document.getElementById("script-content");
 const detalleDiv = document.getElementById("diagrama-detalle");
 
-const chatInfo = { usuario:{}, api:{}, llm:{}, post:{}, salida:{}, tokenizacion_block:{} };
+let chatInfo = { usuario:[], api:[], llm:[], post:[], salida:[], tokenizacion_block:[] };
+let historialMensajes = [];
+let mensajeCount = 0;
 
-// Mostrar detalle al hacer click en bloques
+// Bloques del diagrama
 document.querySelectorAll(".block").forEach(block => {
   block.addEventListener("click", () => {
-    detalleDiv.textContent = chatInfo[block.id]?.detalle || "Sin detalle disponible.";
+    const historial = chatInfo[block.id];
+    detalleDiv.textContent = historial.length ? historial.join("\n\n") : "Sin detalle disponible.";
     document.querySelectorAll(".block").forEach(b => b.setAttribute("stroke","none"));
     block.setAttribute("stroke","#000");
     block.setAttribute("stroke-width","2");
   });
 });
 
-function actualizarDiagrama(pregunta, modelo, rol, tokenizador, tokens) {
+function actualizarDiagrama(pregunta, modelo, rol, tokenizador, tokens, respuesta){
   const cantidadTokens = tokens.length;
   const tokensStr = tokens.join(" ");
+  const idMsg = `(${mensajeCount})`;
 
-  chatInfo.usuario.detalle = `Usuario:\n- Prompt: ${pregunta}\n- Rol: ${rol}\n- Tokens (${cantidadTokens}): ${tokensStr}`;
-  chatInfo.api.detalle = `API / Backend:\n- Modelo: ${modelo}\n- Tokenización: ${tokenizador}\n- Tokens (${cantidadTokens}): ${tokensStr}`;
-  chatInfo.llm.detalle = `LLM con Groq:\n- Inferencia optimizada\n- Tokens generados (${cantidadTokens}): ${tokensStr}`;
-  chatInfo.post.detalle = `Postprocesamiento:\n- Decodifica tokens\n- Formatea salida\n- Tokens (${cantidadTokens}): ${tokensStr}`;
-  chatInfo.salida.detalle = `Salida:\n- Mensaje final mostrado al usuario\n- Tokens (${cantidadTokens}): ${tokensStr}`;
-
-  let ejemploTokenizacion = "";
-  switch(tokenizador){
-    case "BPE": ejemploTokenizacion = "▁como ▁puedo ▁revisar ▁tokens"; break;
-    case "WordPiece": ejemploTokenizacion = "como ##puedo ##revisar ##tokens"; break;
-    case "SentencePiece": ejemploTokenizacion = "▁como ▁puedo ▁revisar ▁tokens"; break;
-    case "Char": ejemploTokenizacion = "c o m o   p u e d o   r e v i s a r"; break;
-  }
-  chatInfo.tokenizacion_block.detalle = `Tokenización (${tokenizador}):\n${ejemploTokenizacion}\nTokens reales: ${tokensStr}\nCantidad: ${cantidadTokens}`;
+  chatInfo.usuario.push(`${idMsg} Usuario: ${pregunta}`);
+  chatInfo.api.push(`${idMsg} API / Backend: Modelo ${modelo}, Tokenización ${tokenizador}`);
+  chatInfo.llm.push(`${idMsg} LLM: Tokens generados (${cantidadTokens})`);
+  chatInfo.post.push(`${idMsg} Postprocesamiento`);
+  chatInfo.salida.push(`${idMsg} IA: ${respuesta}`);
+  chatInfo.tokenizacion_block.push(`${idMsg} Tokenización (${tokenizador}): ${tokensStr}`);
 
   scriptContent.textContent = JSON.stringify({
-    modelo: modelo,
-    rol: rol,
-    idioma: idiomaSelect.value,
-    tokenizacion: tokenizador,
-    prompt: pregunta,
-    cantidad_tokens: cantidadTokens,
-    tokens_utilizados: tokens
+    modelo, rol, idioma: idiomaSelect.value, tokenizacion: tokenizador,
+    prompt: pregunta, respuesta, cantidad_tokens: cantidadTokens, tokens_utilizados: tokens,
+    historial: historialMensajes
   }, null, 2);
 }
 
-async function consultarIA() {
+async function consultarIA(){
   const pregunta = preguntaInput.value.trim();
-  const modelo = modeloSelect.value;
-  const idioma = idiomaSelect.value;
-  const rol = rolSelect.value;
-  const tokenizador = tokenSelect.value;
+  if(!pregunta) return;
+  mensajeCount++;
 
-  if (!pregunta) return;
+  // Instrucción de idioma
+  const idiomaTexto = idiomaSelect.value === "es" ? "Responde en español: " : "Respond in English: ";
+  const contenido = `${idiomaTexto}${pregunta}`;
 
-  const cont = document.createElement("div");
-  cont.className = "mensaje-container";
-  const msg = document.createElement("div");
-  msg.className = "mensaje usuario";
-  msg.innerText = `[${rol}] ${pregunta}`;
-  cont.appendChild(msg);
-  chatDiv.appendChild(cont);
+  historialMensajes.push({ role: rolSelect.value, content: contenido });
+
+  // Mostrar en chat
+  const contUsuario = document.createElement("div");
+  contUsuario.className = "mensaje-container";
+  const msgUsuario = document.createElement("div");
+  msgUsuario.className = "mensaje usuario";
+  msgUsuario.innerText = `(${mensajeCount}) [${rolSelect.value}] ${pregunta}`;
+  contUsuario.appendChild(msgUsuario);
+  chatDiv.appendChild(contUsuario);
   chatDiv.scrollTop = chatDiv.scrollHeight;
   preguntaInput.value = "";
 
-  const contenido = `Responde en ${idioma === "es" ? "español" : "inglés"}: ${pregunta}`;
-  const requestBody = { model: modelo, messages: [{ role: rol, content: contenido }] };
+  const requestBody = { model: modeloSelect.value, messages: historialMensajes };
 
   try {
     const res = await fetch("https://chat-groq-fsnm.onrender.com/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody)
+      method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(requestBody)
     });
     const data = await res.json();
     const respuesta = data.choices?.[0]?.message?.content || data.choices?.[0]?.text || "No se recibió respuesta.";
-
     const tokens = data.choices?.[0]?.message?.tokens || respuesta.split(/\s+/);
 
-    actualizarDiagrama(pregunta, modelo, rol, tokenizador, tokens);
+    historialMensajes.push({ role: "assistant", content: respuesta });
 
-    const respCont = document.createElement("div");
-    respCont.className = "mensaje-container";
-    const respMsg = document.createElement("div");
-    respMsg.className = "mensaje ia";
-    respMsg.innerText = `[IA] ${respuesta}`;
-    respCont.appendChild(respMsg);
-    chatDiv.appendChild(respCont);
+    const contIA = document.createElement("div");
+    contIA.className = "mensaje-container";
+    const msgIA = document.createElement("div");
+    msgIA.className = "mensaje ia";
+    msgIA.innerText = `(${mensajeCount}) [IA] ${respuesta}`;
+    contIA.appendChild(msgIA);
+    chatDiv.appendChild(contIA);
     chatDiv.scrollTop = chatDiv.scrollHeight;
 
-  } catch(e) {
-    console.error(e);
-    const errorCont = document.createElement("div");
-    errorCont.className = "mensaje-container";
-    const errorMsg = document.createElement("div");
-    errorMsg.className = "mensaje ia";
-    errorMsg.innerText = "Error en la conexión o en la API.";
-    errorCont.appendChild(errorMsg);
-    chatDiv.appendChild(errorCont);
+    actualizarDiagrama(pregunta, modeloSelect.value, rolSelect.value, tokenSelect.value, tokens, respuesta);
+
+  } catch(e){
+    const contError = document.createElement("div");
+    contError.className = "mensaje-container";
+    const msgError = document.createElement("div");
+    msgError.className = "mensaje ia";
+    msgError.innerText = "Error en la conexión o en la API.";
+    contError.appendChild(msgError);
+    chatDiv.appendChild(contError);
   }
 }
 
+// Botón nueva consulta
+document.getElementById("new-btn").addEventListener("click", ()=>{
+  chatDiv.innerHTML = "";
+  scriptContent.textContent = "{}";
+  detalleDiv.textContent = "Haz clic en un bloque del diagrama para ver detalles...";
+  chatInfo = { usuario:[], api:[], llm:[], post:[], salida:[], tokenizacion_block:[] };
+  historialMensajes = [];
+  mensajeCount = 0;
+  document.querySelectorAll(".block").forEach(b => b.setAttribute("stroke","none"));
+});
+
+// Botones
 document.getElementById("send-btn").addEventListener("click", consultarIA);
-preguntaInput.addEventListener("keypress", e => { if(e.key === "Enter") consultarIA(); });
+preguntaInput.addEventListener("keypress", e => { if(e.key==="Enter") consultarIA(); });
 
-document.getElementById("pdf-btn").addEventListener("click", () => {
+// PDF
+document.getElementById("pdf-btn").addEventListener("click", ()=>{
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('p', 'pt', 'a4');
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 30;
-  const maxLineWidth = pageWidth - 2 * margin;
-  let y = margin;
-
-  const mensajes = Array.from(chatDiv.querySelectorAll(".mensaje")).map(m => m.innerText);
-  mensajes.forEach(mensaje => {
-    const lines = doc.splitTextToSize(mensaje, maxLineWidth);
-    lines.forEach(line => {
-      if (y > pageHeight - margin) { doc.addPage(); y = margin; }
-      doc.text(margin, y, line);
-      y += 14;
-    });
-    y += 10;
+  const doc = new jsPDF('p','pt','a4'); const margin=30; let y=margin;
+  const pageWidth = doc.internal.pageSize.getWidth(); const pageHeight = doc.internal.pageSize.getHeight();
+  const maxLineWidth = pageWidth-2*margin;
+  const mensajes = Array.from(chatDiv.querySelectorAll(".mensaje")).map(m=>m.innerText);
+  mensajes.forEach(m=>{
+    const lines = doc.splitTextToSize(m,maxLineWidth); lines.forEach(line=>{if(y>pageHeight-margin){doc.addPage();y=margin;} doc.text(margin,y,line); y+=14;}); y+=10;
   });
-
-  const scriptLines = doc.splitTextToSize(scriptContent.textContent, maxLineWidth);
-  if (y > pageHeight - margin) { doc.addPage(); y = margin; }
-  doc.text(margin, y, "Script JSON:");
-  y += 14;
-  scriptLines.forEach(line => {
-    if (y > pageHeight - margin) { doc.addPage(); y = margin; }
-    doc.text(margin, y, line);
-    y += 14;
-  });
-
+  const scriptLines = doc.splitTextToSize(scriptContent.textContent,maxLineWidth);
+  if(y>pageHeight-margin){doc.addPage();y=margin;} doc.text(margin,y,"Script JSON:"); y+=14;
+  scriptLines.forEach(line=>{if(y>pageHeight-margin){doc.addPage();y=margin;} doc.text(margin,y,line); y+=14;});
   doc.save("Chat_IA_Daniel.pdf");
 });
 </script>
