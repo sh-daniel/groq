@@ -198,11 +198,10 @@ async function consultarIA() {
   const requestBody = { model: modelo, messages: [{ role: rol, content: contenido }] };
 
   try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer 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"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(requestBody)
     });
